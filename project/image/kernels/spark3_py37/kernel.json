@@ -1,0 +1,11 @@
+{
+ "argv": [
+  "/opt/conda/envs/spark3_py37/bin/python",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "spark3_py37",
+ "language": "python"
+}

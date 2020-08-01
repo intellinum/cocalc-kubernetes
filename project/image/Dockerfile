@@ -238,16 +238,34 @@ RUN umask 022 \
 # Disable ssh
 RUN rm -f /usr/bin/ssh
 
-# Switch to being the non-privileged user.
-USER user
-
 # Install Mini-conda
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
-    /bin/bash /tmp/miniconda.sh -b -p ~/conda && \
+    /bin/bash /tmp/miniconda.sh -b -p /opt/conda && \
     rm /tmp/miniconda.sh
-RUN /home/user/conda/bin/conda init
 
+# Install custom conda env
+RUN /opt/conda/bin/conda create -n spark3_py37 -y python=3.7 numpy ipykernel pandas
+RUN /opt/conda/bin/conda install --name spark3_py37 -y pyspark==3.0.0 && \
+/opt/conda/bin/conda install --name spark3_py37 -y scikit-learn && \
+/opt/conda/bin/conda install --name spark3_py37 -y seaborn && \
+/opt/conda/bin/conda install --name spark3_py37 -y scipy && \
+/opt/conda/bin/conda install --name spark3_py37 -y matplotlib && \
+echo 'y'| /opt/conda/envs/spark3_py37/bin/pip install statsmodels
+
+RUN chown -R user:user /opt/conda
+
+# Install kernel
+COPY kernels/spark3_py37 /usr/local/share/jupyter/kernels/spark3_py37
+
+# replace default python kernel
+#RUN sed -i 's#/usr/bin/python3#/home/user/conda/envs/spark3_py37/bin/python#g' /usr/share/jupyter/kernels/python3/kernel.json
+
+# =========Switch to being the non-privileged user.=========
+USER user
 WORKDIR /home/user
+
+RUN /opt/conda/bin/conda init
+
 
 EXPOSE 2222 6000 6001
 
