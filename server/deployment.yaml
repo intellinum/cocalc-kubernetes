@@ -23,7 +23,7 @@ spec:
       - env:
         - name: KUBERNETES_REGISTRY
           value: sagemathinc
-        image: intellinum/cocalc-kubernetes-server:latest
+        image: intellinum/cocalc-kubernetes-server:1.0.0
         name: cocalc-kubernetes-server
         ports:
         - containerPort: 80

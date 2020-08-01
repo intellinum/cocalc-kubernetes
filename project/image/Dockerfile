@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-LABEL maintainer="SageMath, Inc. <office@sagemath.com>"
+LABEL maintainer="Intellinum Analytics, Inc. <yuan@intellinum.co>"
 
 # So we can source (http://goo.gl/oBPi5G), which we will do in build.sh.
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -235,8 +235,17 @@ RUN umask 022 \
 RUN umask 022 \
   && echo "install.packages('knitr');" | R --no-save
 
+# Disable ssh
+RUN rm -f /usr/bin/ssh
+
 # Switch to being the non-privileged user.
 USER user
+
+# Install Mini-conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh && \
+    /bin/bash /tmp/miniconda.sh -b -p ~/conda && \
+    rm /tmp/miniconda.sh
+RUN /home/user/conda/bin/conda init
 
 WORKDIR /home/user
 
