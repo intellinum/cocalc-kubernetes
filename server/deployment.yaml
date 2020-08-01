@@ -23,7 +23,7 @@ spec:
       - env:
         - name: KUBERNETES_REGISTRY
           value: sagemathinc
-        image: sagemathinc/cocalc-kubernetes-server:latest
+        image: intellinum/cocalc-kubernetes-server:latest
         name: cocalc-kubernetes-server
         ports:
         - containerPort: 80
@@ -46,5 +46,7 @@ spec:
       serviceAccountName: cocalc-kubernetes-server
       terminationGracePeriodSeconds: 15
       volumes:
-      - emptyDir: {}
-        name: projects
+        - name: cocalc-pv-storage
+          persistentVolumeClaim:
+            claimName: cocalc-pv-claim
+      nodeName: devbox.intellinum.co
