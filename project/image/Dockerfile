@@ -152,7 +152,7 @@ RUN \
 # RUN echo "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'httr', 'uuid', 'digest'), repos='http://cran.us.r-project.org'); devtools::install_github('IRkernel/IRkernel')" | R --no-save
 
 # Get the source code of cocalc, putting it at /cocalc
-RUN umask 022 && git clone https://github.com/sagemathinc/cocalc.git
+RUN umask 022 && git clone https://github.com/intellinum/cocalc.git
 
 # tini: https://github.com/krallin/tini
 # This is also included in Docker itself via the `--init` flag
@@ -244,28 +244,35 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86
     rm /tmp/miniconda.sh
 
 # Install custom conda env
-RUN /opt/conda/bin/conda create -n spark3_py37 -y python=3.7 numpy ipykernel pandas
-RUN /opt/conda/bin/conda install --name spark3_py37 -y pyspark==3.0.0 && \
-/opt/conda/bin/conda install --name spark3_py37 -y scikit-learn && \
-/opt/conda/bin/conda install --name spark3_py37 -y seaborn && \
-/opt/conda/bin/conda install --name spark3_py37 -y scipy && \
-/opt/conda/bin/conda install --name spark3_py37 -y matplotlib && \
-echo 'y'| /opt/conda/envs/spark3_py37/bin/pip install statsmodels
+RUN /opt/conda/bin/conda create -n spark2_py37 -y python=3.7 numpy ipykernel pandas
+RUN /opt/conda/bin/conda install --name spark2_py37 -y pyspark==2.4.4 && \
+/opt/conda/bin/conda install --name spark2_py37 -y scikit-learn && \
+/opt/conda/bin/conda install --name spark2_py37 -y seaborn && \
+/opt/conda/bin/conda install --name spark2_py37 -y scipy && \
+/opt/conda/bin/conda install --name spark2_py37 -y matplotlib && \
+/opt/conda/bin/conda install --name spark2_py37 -y sparkmagic && \
+echo 'y'| /opt/conda/envs/spark2_py37/bin/pip install statsmodels
 
 RUN chown -R user:user /opt/conda
 
 # Install kernel
-COPY kernels/spark3_py37 /usr/local/share/jupyter/kernels/spark3_py37
+COPY kernels/spark2_py37 /usr/local/share/jupyter/kernels/spark2_py37
 
-# replace default python kernel
-#RUN sed -i 's#/usr/bin/python3#/home/user/conda/envs/spark3_py37/bin/python#g' /usr/share/jupyter/kernels/python3/kernel.json
+# Install Sparkmagic
+RUN pip3 install sparkmagic
+RUN /opt/conda/bin/conda install -y -c conda-forge nodejs
+RUN jupyter labextension install "@jupyter-widgets/jupyterlab-manager"
+RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension 
+RUN pip3 install numpy --upgrade
+RUN jupyter serverextension enable --py sparkmagic
+
+RUN mkdir -p /opt/sparkmagic
+RUN chown user:user /opt/sparkmagic
+COPY sparkmagic/config.json /opt/sparkmagic/config.json
 
 # =========Switch to being the non-privileged user.=========
 USER user
 WORKDIR /home/user
-
-RUN /opt/conda/bin/conda init
-
 
 EXPOSE 2222 6000 6001
 
