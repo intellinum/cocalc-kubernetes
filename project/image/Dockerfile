@@ -260,8 +260,8 @@ COPY kernels/spark2_py37 /usr/local/share/jupyter/kernels/spark2_py37
 
 # Install Sparkmagic
 RUN pip3 install sparkmagic
-RUN /opt/conda/bin/conda install -y -c conda-forge nodejs
-RUN jupyter labextension install "@jupyter-widgets/jupyterlab-manager"
+# RUN /opt/conda/bin/conda install -y -c conda-forge nodejs
+# RUN jupyter labextension install "@jupyter-widgets/jupyterlab-manager"
 RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension 
 RUN pip3 install numpy --upgrade
 RUN jupyter serverextension enable --py sparkmagic

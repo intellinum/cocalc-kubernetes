@@ -6,6 +6,7 @@ metadata:
   labels:
     run: cocalc-kubernetes-server
   name: cocalc-kubernetes-server
+  namespace: cocalc
 spec:
   minReadySeconds: 30
   replicas: 1
@@ -22,9 +23,16 @@ spec:
       containers:
       - env:
         - name: KUBERNETES_REGISTRY
-          value: sagemathinc
+          value: intellinum
         image: intellinum/cocalc-kubernetes-server:1.0.0
         name: cocalc-kubernetes-server
+        resources:
+          limits:
+            memory: "8000Mi"
+            cpu: "2000m"
+          requests:
+            memory: "8000Mi"
+            cpu: "2000m"
         ports:
         - containerPort: 80
           name: http
@@ -42,7 +50,7 @@ spec:
           privileged: true
         volumeMounts:
         - mountPath: /projects
-          name: projects
+          name: cocalc-pv-storage
       serviceAccountName: cocalc-kubernetes-server
       terminationGracePeriodSeconds: 15
       volumes:
