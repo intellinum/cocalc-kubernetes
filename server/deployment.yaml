@@ -28,10 +28,10 @@ spec:
         name: cocalc-kubernetes-server
         resources:
           limits:
-            memory: "8000Mi"
-            cpu: "2000m"
+            memory: "12000Mi"
+            cpu: "6000m"
           requests:
-            memory: "8000Mi"
+            memory: "4000Mi"
             cpu: "2000m"
         ports:
         - containerPort: 80

@@ -251,6 +251,7 @@ RUN /opt/conda/bin/conda install --name spark2_py37 -y pyspark==2.4.4 && \
 /opt/conda/bin/conda install --name spark2_py37 -y scipy && \
 /opt/conda/bin/conda install --name spark2_py37 -y matplotlib && \
 /opt/conda/bin/conda install --name spark2_py37 -y sparkmagic && \
+/opt/conda/bin/conda install --name spark2_py37 -y hdfs3 && \
 echo 'y'| /opt/conda/envs/spark2_py37/bin/pip install statsmodels
 
 RUN chown -R user:user /opt/conda
