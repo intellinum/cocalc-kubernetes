@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-MAINTAINER William Stein <wstein@sagemath.com>
+MAINTAINER Yuan Zhao <yuan@intellinum.co>
 
 USER root
 
