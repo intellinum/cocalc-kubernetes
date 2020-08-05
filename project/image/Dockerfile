@@ -151,9 +151,12 @@ RUN \
 # RUN echo "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'httr', 'uuid', 'digest'), repos='http://cran.us.r-project.org'); devtools::install_github('IRkernel/IRkernel')" | sage -R --no-save
 # RUN echo "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'httr', 'uuid', 'digest'), repos='http://cran.us.r-project.org'); devtools::install_github('IRkernel/IRkernel')" | R --no-save
 
+# Commit to checkout and build.
+ARG branch=dev_1.0.1
 # Get the source code of cocalc, putting it at /cocalc
-RUN umask 022 && git clone https://github.com/intellinum/cocalc.git
-
+RUN umask 022 && git clone https://github.com/intellinum/cocalc.git \
+  && cd /cocalc && git pull && git fetch origin && git checkout ${branch:-HEAD}
+  
 # tini: https://github.com/krallin/tini
 # This is also included in Docker itself via the `--init` flag
 COPY tini /cocalc/bin/tini
@@ -173,8 +176,6 @@ RUN \
 # Get our custom build script.
 COPY kubernetes_build.py /cocalc/kubernetes_build.py
 
-# Which branch to checkout and build.
-ARG branch=master
 
 # Run the build script once, so subsequent builds will be fast.
 RUN umask 022 && source /cocalc/nvm/nvm.sh && /cocalc/kubernetes_build.py

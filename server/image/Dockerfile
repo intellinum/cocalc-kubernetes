@@ -45,7 +45,7 @@ RUN apt-get install -y nfs-kernel-server
 # ARG RANDOM=
 
 # Commit to checkout and build.
-ARG branch=HEAD
+ARG branch=dev_1.0.1
 
 # Pull latest source code for CoCalc and checkout requested branch (or HEAD)
 RUN \

@@ -24,7 +24,7 @@ spec:
       - env:
         - name: KUBERNETES_REGISTRY
           value: intellinum
-        image: intellinum/cocalc-kubernetes-server:1.0.0
+        image: intellinum/cocalc-kubernetes-server:1.0.1
         name: cocalc-kubernetes-server
         resources:
           limits:
