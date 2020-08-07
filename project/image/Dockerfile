@@ -152,7 +152,7 @@ RUN \
 # RUN echo "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'httr', 'uuid', 'digest'), repos='http://cran.us.r-project.org'); devtools::install_github('IRkernel/IRkernel')" | R --no-save
 
 # Commit to checkout and build.
-ARG branch=dev_1.0.1
+ARG branch=dev_1.0.1.1
 # Get the source code of cocalc, putting it at /cocalc
 RUN umask 022 && git clone https://github.com/intellinum/cocalc.git \
   && cd /cocalc && git pull && git fetch origin && git checkout ${branch:-HEAD}
@@ -253,7 +253,8 @@ RUN /opt/conda/bin/conda install --name spark2_py37 -y pyspark==2.4.4 && \
 /opt/conda/bin/conda install --name spark2_py37 -y matplotlib && \
 /opt/conda/bin/conda install --name spark2_py37 -y sparkmagic && \
 /opt/conda/bin/conda install --name spark2_py37 -y hdfs3 && \
-echo 'y'| /opt/conda/envs/spark2_py37/bin/pip install statsmodels
+echo 'y'| /opt/conda/envs/spark2_py37/bin/pip install statsmodels \
+echo 'y'| /opt/conda/envs/spark2_py37/bin/pip install mlflow==1.10.0
 
 RUN chown -R user:user /opt/conda
 
@@ -271,6 +272,11 @@ RUN jupyter serverextension enable --py sparkmagic
 RUN mkdir -p /opt/sparkmagic
 RUN chown user:user /opt/sparkmagic
 COPY sparkmagic/config.json /opt/sparkmagic/config.json
+
+# Install Browsh
+RUN cd /tmp && wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
+RUN apt install -y /tmp/browsh_1.6.4_linux_amd64.deb
+RUN rm -f /tmp/browsh_1.6.4_linux_amd64.deb
 
 # =========Switch to being the non-privileged user.=========
 USER user
