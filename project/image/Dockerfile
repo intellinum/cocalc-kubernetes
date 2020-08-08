@@ -286,11 +286,6 @@ RUN mkdir -p /opt/sparkmagic
 RUN chown user:user /opt/sparkmagic
 COPY sparkmagic/config.json /opt/sparkmagic/config.json
 
-# Install Browsh
-RUN cd /tmp && wget https://github.com/browsh-org/browsh/releases/download/v1.6.4/browsh_1.6.4_linux_amd64.deb
-RUN apt install -y /tmp/browsh_1.6.4_linux_amd64.deb
-RUN rm -f /tmp/browsh_1.6.4_linux_amd64.deb
-
 # =========Switch to being the non-privileged user.=========
 USER user
 WORKDIR /home/user
