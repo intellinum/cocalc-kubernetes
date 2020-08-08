@@ -153,7 +153,7 @@ RUN \
 # RUN echo "install.packages(c('repr', 'IRdisplay', 'evaluate', 'crayon', 'pbdZMQ', 'httr', 'uuid', 'digest'), repos='http://cran.us.r-project.org'); devtools::install_github('IRkernel/IRkernel')" | R --no-save
 
 # Commit to checkout and build.
-ARG branch=dev_1.0.1.1
+ARG branch=dev_1.0.2
 # Get the source code of cocalc, putting it at /cocalc
 RUN umask 022 && git clone https://github.com/intellinum/cocalc.git \
   && cd /cocalc && git pull && git fetch origin && git checkout ${branch:-HEAD}
