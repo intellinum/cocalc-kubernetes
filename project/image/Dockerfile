@@ -64,6 +64,7 @@ RUN \
        imagemagick \
        libcairo2-dev \
        libcurl4-openssl-dev \
+       libxml2-dev \
        graphviz \
        smem \
        octave \
@@ -235,7 +236,19 @@ RUN umask 022 \
 
 RUN umask 022 \
   && echo "install.packages('knitr');" | R --no-save
+  
+RUN umask 022 \
+  && echo "install.packages('sparklyr');" | R --no-save
+  
+RUN umask 022 \
+  && echo "install.packages('devtools');" | R --no-save
 
+RUN umask 022 \
+  && echo "install.packages('dplyr');" | R --no-save
+  
+RUN umask 022 \
+  && echo "install.packages('DBI');" | R --no-save
+  
 # Disable ssh
 RUN rm -f /usr/bin/ssh
 
