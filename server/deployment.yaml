@@ -6,7 +6,6 @@ metadata:
   labels:
     run: cocalc-kubernetes-server
   name: cocalc-kubernetes-server
-  namespace: cocalc
 spec:
   minReadySeconds: 30
   replicas: 1
